@@ -18,7 +18,9 @@ button  { font-family: inherit; font-size: 1rem; padding: 0.3rem 0.9rem; margin-
 #status { min-height: 1.5em; font-style: italic; color: #555; }
 
 #tree {
-  .edge { stroke: #999; stroke-width: 2; transition: stroke 0.4s, stroke-width 0.4s; }
+  .edge { stroke: #999; stroke-width: 2; transition: stroke 0.4s, stroke-width 0.4s, opacity 0.5s; }
+  circle, rect, text { transition: opacity 0.5s; }
+  .off-path { opacity: 0.25; }
   .edge.considering { stroke: #d4a017; stroke-width: 4; }
   .edge.chosen      { stroke: #8b1a1a; stroke-width: 4; }
   .edge.rejected    { stroke: #ddd; stroke-dasharray: 6 4; }

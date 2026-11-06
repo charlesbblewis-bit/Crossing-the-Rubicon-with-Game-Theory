@@ -3,28 +3,23 @@
 const solveBtn = document.getElementById("solve-btn");
 const stepBtn  = document.getElementById("step-btn");
 const statusEl = document.getElementById("status");
+const backBtn  = document.getElementById("back-btn");
 
 let solution = null;   // what solve() returned: { outcome, path, order }
 let steps = [];        // the list from buildSteps
 let current = 0;       // index of the next step to show
 
 solveBtn.addEventListener("click", () => {
-  resetAll();
   solution = solve(game);
   for (const entry of solution.order) {
     entry.node.valueParts = setPayoffText(entry.node.valueEl, entry.outcome.payoffs);
   }
   steps = buildSteps(solution.order);
-  current = 0;
-  stepBtn.disabled = false;
-  statusEl.textContent = `Solved: ${steps.length} steps. Press Step.`;
+  goTo(0);
 });
 
-stepBtn.addEventListener("click", () => {
-  applyStep(steps[current]);
-  current++;
-  if (current === steps.length) stepBtn.disabled = true;
-});
+stepBtn.addEventListener("click", () => goTo(current + 1));
+backBtn.addEventListener("click", () => goTo(current - 1));
 
 function buildSteps(order){
     const steps = [];
@@ -43,7 +38,7 @@ function clearClass(cls) {
 }
 
 function resetAll() {
-  for (const cls of ["considering", "current", "compared", "chosen", "rejected", "on-path"]) clearClass(cls);
+  for (const cls of ["considering", "current", "compared", "chosen", "rejected", "on-path", "off-path"]) clearClass(cls);
   document.querySelectorAll(".value").forEach(el => el.classList.add("hidden"));
 }
 
@@ -56,8 +51,12 @@ function applyStep(step) {
     for (const s of solution.path) {
       s.node.actions[s.action].edgeEl.classList.add("on-path");
     }
+    const onPath = new Set(solution.path.map(s => s.node));
+    onPath.add(solution.outcome);
+    markOffPath(game, onPath);
+
     const route = solution.path.map(s => `${s.node.player} ${s.action}`).join(", ");
-    statusEl.textContent = `Equilibrium: ${route} → ${solution.outcome.outcome}`;
+    statusEl.textContent = `Equilibrium: ${route} → ${solution.outcome.outcome}.` 
     return;
   }
 
@@ -91,7 +90,7 @@ function applyStep(step) {
       statusEl.textContent = `For ${node.player}: ${lines.join(", ")}.`;
       break;
     }
-    
+
     case "value": {
         node.valueEl.classList.remove("hidden");
         statusEl.textContent = `So this decision is worth ${node.valueEl.textContent} (${step.entry.outcome.outcome}).`;
@@ -100,5 +99,24 @@ function applyStep(step) {
 
     default:
       statusEl.textContent = `(${step.type}: not built yet)`;
+  }
+}
+
+function goTo(n) {
+  resetAll();
+  for (let i = 0; i < n; i++) applyStep(steps[i]);
+  current = n;
+  if (n === 0) statusEl.textContent = `Solved: ${steps.length} steps. Press Step.`;
+  stepBtn.disabled = current >= steps.length;
+  backBtn.disabled = current === 0;
+}
+
+function markOffPath(node, onPath) {
+  if (!onPath.has(node)) {
+    node.els.forEach(el => el.classList.add("off-path"));
+    if (node.edgeEls) node.edgeEls.forEach(el => el.classList.add("off-path"));
+  }
+  if (node instanceof Decision) {
+    for (const child of Object.values(node.actions)) markOffPath(child, onPath);
   }
 }

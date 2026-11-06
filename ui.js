@@ -61,34 +61,34 @@ function drawEdges(node) {
     svg.appendChild(child.edgeEl);
 
     const goesLeft = child.x < node.x;
-    addText(
-      (node.x + child.x) / 2 + (goesLeft ? -10 : 10),   // midpoint, nudged away from the line
+    const actionLabel = addText(
+      (node.x + child.x) / 2 + (goesLeft ? -10 : 10),
       (node.y + child.y) / 2,
       action,
       "action",
       goesLeft ? "end" : "start"
     );
-
-    drawEdges(child);                                    // then do the same below this child
+    child.edgeEls = [child.edgeEl, actionLabel];
+    drawEdges(child);                          // then do the same below this child
   }
 }
 
 function drawNodes(node) {
   if (node instanceof Outcome) {
-    svg.appendChild(svgEl("rect", {
-      x: node.x - 6, y: node.y - 6, width: 12, height: 12, class: "leaf"
-    }));
-    addText(node.x, node.y + 28, node.outcome, "outcome");
-
-  const payoffEl = addText(node.x, node.y + 46, "", "payoff");
-  node.payoffParts = setPayoffText(payoffEl, node.payoffs);
+    const rect = svgEl("rect", { x: node.x - 6, y: node.y - 6, width: 12, height: 12, class: "leaf" });
+    svg.appendChild(rect);
+    const outcomeLabel = addText(node.x, node.y + 28, node.outcome, "outcome");
+    const payoffEl = addText(node.x, node.y + 46, "", "payoff");
+    node.payoffParts = setPayoffText(payoffEl, node.payoffs);
+    node.els = [rect, outcomeLabel, payoffEl];
     return;
   }
 
-  node.circleEl = svgEl("circle", { cx: node.x, cy: node.y, r: 14, class: "decision" });   // replaces old circle line
-  svg.appendChild(node.circleEl);                                                          // replaces old circle line
-  addText(node.x, node.y - 22, node.player, "player");                                     // unchanged
-  node.valueEl = addText(node.x + 22, node.y + 5, "", "value hidden", "start");   
+  node.circleEl = svgEl("circle", { cx: node.x, cy: node.y, r: 14, class: "decision" });
+  svg.appendChild(node.circleEl);
+  const playerLabel = addText(node.x, node.y - 22, node.player, "player");
+  node.valueEl = addText(node.x + 22, node.y + 5, "", "value hidden", "start");
+  node.els = [node.circleEl, playerLabel, node.valueEl];
 
   for (const child of Object.values(node.actions)) {
     drawNodes(child);
