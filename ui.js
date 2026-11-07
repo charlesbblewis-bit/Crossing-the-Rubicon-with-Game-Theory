@@ -80,6 +80,7 @@ function drawNodes(node) {
     const outcomeLabel = addText(node.x, node.y + 28, node.outcome, "outcome");
     const payoffEl = addText(node.x, node.y + 46, "", "payoff");
     node.payoffParts = setPayoffText(payoffEl, node.payoffs);
+    node.payoffEl = payoffEl;
     node.els = [rect, outcomeLabel, payoffEl];
     return;
   }

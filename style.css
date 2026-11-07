@@ -14,10 +14,31 @@ h1 {
   font-weight: normal;
 }
 
+.scene        { display: none; }
+.scene.active { display: block; }
+
+#intro        { min-height: 80vh; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+#intro.active { display: flex; }
+
+.prompt { margin-top: 3rem; font-style: italic; color: #555; animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
 button  { font-family: inherit; font-size: 1rem; padding: 0.3rem 0.9rem; margin-right: 0.5rem; cursor: pointer; }
 #status { min-height: 1.5em; font-style: italic; color: #555; }
 
+#atTheRiver.active {
+  display: flex;
+  position: fixed;
+  inset: 0;
+  background: url("images/Rubicon With Caesar.jpg") center / cover no-repeat;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 #tree {
+  min-height: 300px;
+  margin-top: 1rem;
   .edge { stroke: #999; stroke-width: 2; transition: stroke 0.4s, stroke-width 0.4s, opacity 0.5s; }
   circle, rect, text { transition: opacity 0.5s; }
   .off-path { opacity: 0.25; }
@@ -32,7 +53,6 @@ button  { font-family: inherit; font-size: 1rem; padding: 0.3rem 0.9rem; margin-
   .action   { font-style: italic; fill: #555; font-size: 14px; }
   .outcome  { font-size: 14px; }
   .payoff   { font-size: 13px; fill: #555; }
-  .value  { font-size: 13px; fill: #8b1a1a; }
   .hidden { opacity: 0; }
   .player, .action, .value {
   paint-order: stroke;          /* draw the outline first, then the letters on top */
@@ -42,7 +62,26 @@ button  { font-family: inherit; font-size: 1rem; padding: 0.3rem 0.9rem; margin-
   }
   .compared { font-weight: bold; fill: #b8860b; }
   .value    { font-size: 13px; fill: #8b1a1a; transition: opacity 0.5s; }
-  min-height: 300px;
-  margin-top: 1rem;
-
+  .unbuilt { opacity: 0; }
+  .edge.spotlight               { stroke: #d4a017; stroke-width: 4; }
+  circle.spotlight, rect.spotlight { stroke: #d4a017; stroke-width: 4; }
+  text.spotlight, tspan.spotlight  { fill: #b8860b; font-weight: bold; }
 }
+
+.choices        { display: flex; gap: 1rem; justify-content: center; margin-top: 1rem; }
+.choices button { font-size: 1.2rem; padding: 0.5rem 1.5rem; }
+#cross-btn      { background: #8b1a1a; color: #fff; border: none; }
+
+
+.scene-text {
+  background: rgba(253, 251, 246, 0.88);
+  padding: 1rem 1.5rem;
+  margin: 2rem 1rem 0;
+  max-width: 700px;
+}
+
+#build-quote      { border-left: 3px solid #8b1a1a; background: #f4efe4; margin: 1rem 0; padding: 0.5rem 1rem; }
+#build-quote cite { display: block; margin-top: 0.5rem; font-size: 0.9rem; color: #555; }
+
+#build-note    { background: #eef2f5; border-left: 3px solid #4a6b82; margin: 1rem 0; padding: 0.5rem 1rem; }
+#build-note h3 { margin: 0 0 0.3rem; font-size: 0.85rem; font-weight: normal; text-transform: uppercase; letter-spacing: 0.05em; color: #4a6b82; }
