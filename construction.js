@@ -1,6 +1,5 @@
 "use strict";
 
-const buildText   = document.getElementById("build-text");
 const buildQuote  = document.getElementById("build-quote");
 const quoteText   = document.getElementById("build-quote-text");
 const quoteSource = document.getElementById("build-quote-source");
@@ -25,7 +24,6 @@ function showSlide(n) {
   for (const ref of slide.highlight ?? []) {
     elementsFor(ref).forEach(el => el.classList.add("spotlight"));
   }
-  buildText.innerHTML = slide.text;
   if (slide.quote) {
     quoteText.innerHTML = slide.quote.text;
     quoteSource.textContent = slide.quote.source;

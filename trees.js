@@ -1,13 +1,29 @@
 function baseTree() {
-  const consul = new Outcome("Caesar becomes consul", { Caesar: 3, Opponents: 1 });
-  const ruined = new Outcome("Caesar is prosecuted",      { Caesar: 1, Opponents: 3 });
-  const war    = new Outcome("War",                   { Caesar: 2, Opponents: 2 });
+  const consul   = new Outcome("Caesar consul",    { Caesar: 3, Opponents: 1 });
+  const shutOut  = new Outcome("Caesar shut out",  { Caesar: 1, Opponents: 4 });
+  const war1     = new Outcome("War",              { Caesar: 2, Opponents: 3 });
+  const war2     = new Outcome("War",              { Caesar: 2, Opponents: 3 });
+  const bothDown = new Outcome("Caesar consul", { Caesar: 3, Opponents: 1 });
 
-  const opponentsDecide = new Decision("Opponents", "Caesar is presecuted",
-    { Honour: consul, Exploit: ruined });
+  const afterComply = new Decision("Opponents", "Caesar has disarmed alone", { Honour: consul, Exploit: shutOut });
+  const caesarAlone = new Decision("Caesar", "Demand: Caesar disarms alone", { Comply: afterComply, Cross: war1 });
+  const caesarBoth  = new Decision("Caesar", "Demand: both disarm",          { Comply: bothDown,    Cross: war2 });
 
-  return new Decision("Caesar", "Senate's demand: disband by a fixed date",
-    { Comply: opponentsDecide, Cross: war });
+  return new Decision("Opponents", "Choose the demand", { "Demand Caesar disarm alone": caesarAlone, "Agree to simultaneous disarmament": caesarBoth });
+}
+
+function pompeyNoWar() {
+  const consul   = new Outcome("Caesar consul",    { Caesar: 3, Opponents: 1 });
+  const shutOut  = new Outcome("Caesar shut out",  { Caesar: 1, Opponents: 4 });
+  const war1     = new Outcome("War",              { Caesar: 2, Opponents: 0 });
+  const war2     = new Outcome("War",              { Caesar: 2, Opponents: 0 });
+  const bothDown = new Outcome("Caesar consul", { Caesar: 3, Opponents: 1 });
+
+  const afterComply = new Decision("Opponents", "Caesar has disarmed alone", { Honour: consul, Exploit: shutOut });
+  const caesarAlone = new Decision("Caesar", "Demand: Caesar disarms alone", { Comply: afterComply, Cross: war1 });
+  const caesarBoth  = new Decision("Caesar", "Demand: both disarm",          { Comply: bothDown,    Cross: war2 });
+
+  return new Decision("Opponents", "Choose the demand", { "Demand Caesar disarm alone": caesarAlone, "Agree to simultaneous disarmament": caesarBoth });
 }
 
 const trees = {
