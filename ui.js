@@ -1,5 +1,5 @@
 const SVG_NS = "http://www.w3.org/2000/svg";
-const game = trees.base;
+let game = trees.base;
 
 function svgEl(tag, attrs) {
   const el = document.createElementNS(SVG_NS, tag);
@@ -35,14 +35,8 @@ function layout(node, depth, firstSlot) {
   return { leaves: leaves, depth: deepest };
 }
 
-const { leaves, depth } = layout(game, 0, 0);
 
-const width = 2 * MARGIN + leaves * SLOT_WIDTH;
-const height = 2 * MARGIN + depth * LEVEL_HEIGHT + 50;
-
-
-const svg = svgEl("svg", { width: width, height: height });
-document.getElementById("tree").appendChild(svg);
+let svg;
 
 function addText(x, y, content, cls, anchor = "middle") {
   const t = svgEl("text", { x: x, y: y, class: cls, "text-anchor": anchor });
@@ -109,10 +103,26 @@ function setPayoffText(textEl, payoffs) {
   return parts;
 }
 
+// Clears the tree area and draws the given tree from scratch.
+function loadTree(tree) {
+  game = tree;
+  const treeDiv = document.getElementById("tree");
+  treeDiv.innerHTML = "";
+
+  const { leaves, depth } = layout(game, 0, 0);
+  svg = svgEl("svg", {
+    width: 2 * MARGIN + leaves * SLOT_WIDTH,
+    height: 2 * MARGIN + depth * LEVEL_HEIGHT + 50
+  });
+  treeDiv.appendChild(svg);
+
+  drawEdges(game);
+  drawNodes(game);
+}
+
+loadTree(trees.base);
 
 
-drawEdges(game);
-drawNodes(game);
 
 
 

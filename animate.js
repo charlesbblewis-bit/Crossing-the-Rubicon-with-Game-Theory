@@ -120,3 +120,15 @@ function markOffPath(node, onPath) {
     for (const child of Object.values(node.actions)) markOffPath(child, onPath);
   }
 }
+
+function resetSolve() {
+  solution = null;
+  steps = [];
+  current = 0;
+  statusEl.textContent = "";
+  resetAll();
+}
+
+function solveFinished() {
+  return solution !== null && current >= steps.length;
+}

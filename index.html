@@ -11,47 +11,53 @@
 
 
 <body>
+  <button id="music-btn" aria-label="Toggle music">♪</button>
+
   <section id="intro" class="scene active">
     <h1>Crossing the Rubicon, 49 BC</h1>
-    <p>Exploring game theory through the decision to cross the Rubicon</p>
+    <p>Exploring game theory in ancient history</p>
     <p class="prompt">Press any key or click to begin</p>
     <img src="images/Caesar 1.png" alt="Caesar bust" class="scene-image">
   </section>
 
-  <section id="atTheRiver" class="scene" role="img" aria-label="Caesar and his army at the bank of the Rubicon">
-  <div class="scene-text">
-    <p>You are Caesar at the banks of the Rubicon. Do you choose to cross and begin the civil war?</p>
-    <div class="choices">
-      <button id="cross-btn">Cross</button>
-      <button id="stay-btn">Not cross</button>
-    </div>
-  </div>
+  <section id="history" class="scene">
+    <div id="history-bg-a" class="history-img"></div>
+    <div id="history-bg-b" class="history-img"></div>
+    <div id="history-text" class="parchment"></div>
+    <p id="history-hint">Press Space to continue</p>
   </section>
 
-  <section id="tree-scene" class="scene">
-    <h1>Crossing the Rubicon, 49 BC</h1>
-    <p>A model of Caesar's decision.</p>
-    <div id="build-panel">
-      <p id="build-text"></p>
-      <blockquote id="build-quote" hidden>
-        <p id="build-quote-text"></p>
-        <cite id="build-quote-source"></cite>
-      </blockquote>
-      <aside id="build-note" hidden>
-        <h3 id="build-note-title"></h3>
-        <div id="build-note-text"></div>
-      </aside>
-      <button id="build-back">Back</button>
-      <button id="build-next">Next</button>
-    </div>
-    <div id="controls" hidden>
-      <button id="solve-btn">Solve</button>
-      <button id="back-btn" disabled>Back</button>
-      <button id="step-btn" disabled>Step</button>
-    </div>
-    <p id="status"></p>
-    <div id="tree"></div>
-  </section>
+<section id="tree-scene" class="scene">
+  <h1>Crossing the Rubicon, 49 BC</h1>
+  <p id="key-hint"></p>
+
+  <div id="build-panel">
+    <div id="build-stage">
+      <div class="slot slot-above"></div>
+      <div class="slot slot-left"></div>
+      <div id="build-main">
+        <blockquote id="build-quote" hidden>
+          <p id="build-quote-text"></p>
+          <cite id="build-quote-source"></cite>
+        </blockquote>
+        <aside id="build-note" hidden>
+          <h3 id="build-note-title"></h3>
+          <div id="build-note-text"></div>
+        </aside>
+      </div>
+      <div class="slot slot-right"></div>
+      <div class="slot slot-below"></div>
+    </div>   
+  </div>     
+
+  <div id="controls" hidden>
+    <button id="solve-btn">Solve</button>
+    <button id="back-btn" disabled>Back</button>
+    <button id="step-btn" disabled>Step</button>
+  </div>
+  <p id="status"></p>
+  <div id="tree"></div>
+</section>
 
   <script src="node.js"></script>
   <script src="trees.js"></script>
@@ -60,6 +66,9 @@
   <script src="ui.js"></script>
   <script src="animate.js"></script>
   <script src="construction.js"></script>
+  <script src="keys.js"></script>
+  <script src="music.js"></script>
+  <script src="history.js"></script>
   <script src="scenes.js"></script>
 </body>
 

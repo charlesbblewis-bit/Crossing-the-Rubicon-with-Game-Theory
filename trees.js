@@ -1,9 +1,9 @@
 function baseTree() {
-  const consul   = new Outcome("Caesar consul",    { Caesar: 3, Opponents: 1 });
+  const consul   = new Outcome("Caesar consul",    { Caesar: 4, Opponents: 1 });
   const shutOut  = new Outcome("Caesar shut out",  { Caesar: 1, Opponents: 4 });
-  const war1     = new Outcome("War",              { Caesar: 2, Opponents: 3 });
-  const war2     = new Outcome("War",              { Caesar: 2, Opponents: 3 });
-  const bothDown = new Outcome("Caesar consul", { Caesar: 3, Opponents: 1 });
+  const war1     = new Outcome("War",              { Caesar: 2, Opponents: 2 });
+  const war2     = new Outcome("War",              { Caesar: 2, Opponents: 2 });
+  const bothDown = new Outcome("Caesar consul", { Caesar: 4, Opponents: 1 });
 
   const afterComply = new Decision("Opponents", "Caesar has disarmed alone", { Honour: consul, Exploit: shutOut });
   const caesarAlone = new Decision("Caesar", "Demand: Caesar disarms alone", { Comply: afterComply, Cross: war1 });
@@ -27,5 +27,6 @@ function pompeyNoWar() {
 }
 
 const trees = {
-    base : baseTree()
+    base : baseTree(),
+    pompeyNoWar : pompeyNoWar()
 };

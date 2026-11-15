@@ -3,27 +3,72 @@
 const buildQuote  = document.getElementById("build-quote");
 const quoteText   = document.getElementById("build-quote-text");
 const quoteSource = document.getElementById("build-quote-source");
-const buildBack   = document.getElementById("build-back");
-const buildNext   = document.getElementById("build-next");
-const buildNote = document.getElementById("build-note");
-const noteTitle = document.getElementById("build-note-title");
-const noteText  = document.getElementById("build-note-text");
+const buildNote   = document.getElementById("build-note");
+const noteTitle   = document.getElementById("build-note-title");
+const noteText    = document.getElementById("build-note-text");
+const imageLayer = document.getElementById("build-images");
 
+// The whole presentation, in order. Space walks through this list.
+//   tree:     load this tree (a key of `trees`) when the phase starts
+//   keepTree: don't hide/redraw the tree; slides can still highlight parts of it
+const phases = [
+  { type: "slides", deck: buildSlides },
+  { type: "solve" },
+  { type: "slides", deck: explainSlides, keepTree: true },
+  { type: "slides", deck: peaceSlides, tree: "pompeyNoWar", keepTree: true },
+  { type: "solve" }
+];
+let phaseIndex = 0;
+let currentDeck = buildSlides;
 let slideIndex = 0;
+
+function nextSlide() {
+  if (slideIndex === currentDeck.length - 1) enterPhase(phaseIndex + 1);
+  else showSlide(slideIndex + 1);
+}
+
+function prevSlide() {
+  if (slideIndex > 0) showSlide(slideIndex - 1);
+}
+
+function enterPhase(i) {
+  phaseIndex = i;
+  const phase = phases[i];
+
+  if (phase.tree) loadTree(trees[phase.tree]);
+  if (phase.tree || !phase.keepTree) resetSolve();   // keepTree keeps the solved look
+  clearClass("spotlight");
+
+  if (phase.type === "slides") {
+    currentDeck = phase.deck;
+    statusEl.textContent = "";
+    document.getElementById("build-panel").hidden = false;
+    document.getElementById("controls").hidden = true;
+    showSlide(0);
+  } else {
+    clearClass("unbuilt");
+    document.getElementById("build-panel").hidden = true;
+    document.getElementById("controls").hidden = false;
+  }
+}
 
 function showSlide(n) {
   slideIndex = n;
-  const slide = buildSlides[n];
-  document.querySelectorAll("#tree svg > *").forEach(el => el.classList.add("unbuilt"));
+  const slide = currentDeck[n];
+
   clearClass("spotlight");
-  for (let i = 0; i <= n; i++) {
-    for (const ref of buildSlides[i].reveal ?? []) {
-      elementsFor(ref).forEach(el => el.classList.remove("unbuilt"));
+  if (!phases[phaseIndex].keepTree) {
+    document.querySelectorAll("#tree svg > *").forEach(el => el.classList.add("unbuilt"));
+    for (let i = 0; i <= n; i++) {
+      for (const ref of currentDeck[i].reveal ?? []) {
+        elementsFor(ref).forEach(el => el.classList.remove("unbuilt"));
+      }
     }
   }
   for (const ref of slide.highlight ?? []) {
     elementsFor(ref).forEach(el => el.classList.add("spotlight"));
   }
+
   if (slide.quote) {
     quoteText.innerHTML = slide.quote.text;
     quoteSource.textContent = slide.quote.source;
@@ -40,28 +85,23 @@ function showSlide(n) {
   } else {
     buildNote.hidden = true;
   }
-  
-  buildBack.disabled = n === 0;
-  buildNext.textContent = n === buildSlides.length - 1 ? "Start solving" : "Next";
+
+  document.querySelectorAll("#build-stage .slot").forEach(slot => slot.innerHTML = "");
+  for (const img of slide.images ?? []) {
+    const slot = document.querySelector(`#build-stage .slot-${img.position ?? "right"}`);
+    if (!slot) throw new Error(`Unknown image position "${img.position}"`);
+    const el = document.createElement("img");
+    el.src = img.src;
+    el.alt = img.alt ?? "";
+    el.className = "slide-image";
+    if (img.width) el.style.width = img.width;
+    slot.appendChild(el);
+  }
 }
 
-buildBack.addEventListener("click", () => showSlide(slideIndex - 1));
 
 
-buildNext.addEventListener("click", () => {
-  if (slideIndex === buildSlides.length - 1) finishBuild();
-  else showSlide(slideIndex + 1);
-});
-
-// Swaps the construction panel for the solving controls.
-function finishBuild() {
-  clearClass("unbuilt");
-  clearClass("spotlight");
-  document.getElementById("build-panel").hidden = true;
-  document.getElementById("controls").hidden = false;
-}
-
-// Follows a path like "Comply/Exploit" down from the root.
+// Follows a path like "Demand Caesar disarm alone/Comply" down from the root.
 function nodeAt(path) {
   let node = game;
   if (path === "") return node;
@@ -78,7 +118,7 @@ function nodeAt(path) {
 function elementsFor(ref) {
   if ("node" in ref) {
     const node = nodeAt(ref.node);
-    return node.els.filter(el => el !== node.payoffEl);   // shape and labels, not payoffs
+    return node.els.filter(el => el !== node.payoffEl);
   }
   if ("edge" in ref)    return nodeAt(ref.edge).edgeEls;
   if ("payoffs" in ref) return [nodeAt(ref.payoffs).payoffEl];
@@ -90,4 +130,4 @@ function elementsFor(ref) {
   throw new Error(`Unknown story reference: ${JSON.stringify(ref)}`);
 }
 
-showSlide(0);
+enterPhase(0);
