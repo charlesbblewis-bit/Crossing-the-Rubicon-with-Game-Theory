@@ -174,3 +174,9 @@ button  { font-family: inherit; font-size: 1rem; padding: 0.3rem 0.9rem; margin-
   font-size: 1.1rem;
   cursor: pointer;
 }
+
+
+.slide-figure  { display: table; margin: 0; }
+.slide-image   { display: block; }
+.slide-caption { display: table-caption; caption-side: bottom;
+                 margin-top: 0.4em; font-size: 0.8rem; text-align: center; opacity: 0.8; }

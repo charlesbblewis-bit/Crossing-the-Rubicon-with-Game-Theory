@@ -25,7 +25,6 @@ function solveNode(node, order) {
                 bestAction = currentAction;
             }
             else {
-                /////// LOOOOOK INTO TIES 
                 if (currentOutcome.payoffs[node.player] > maxOutcome.payoffs[node.player]) {
                     maxOutcome = currentOutcome;
                     bestAction = currentAction;

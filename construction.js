@@ -14,17 +14,21 @@ const imageLayer = document.getElementById("build-images");
 const phases = [
   { type: "slides", deck: buildSlides },
   { type: "solve" },
-  { type: "slides", deck: explainSlides, keepTree: true },
-  { type: "slides", deck: peaceSlides, tree: "pompeyNoWar", keepTree: true },
-  { type: "solve" }
+  { type: "slides", deck: explainSlides, tree: "pompeyNoWar", keepTree: true },
+  { type: "solve" },
+  { type: "slides", deck: conclusionSlides, keepTree: true }
 ];
+
 let phaseIndex = 0;
 let currentDeck = buildSlides;
 let slideIndex = 0;
 
 function nextSlide() {
-  if (slideIndex === currentDeck.length - 1) enterPhase(phaseIndex + 1);
-  else showSlide(slideIndex + 1);
+  if (slideIndex === currentDeck.length - 1) {
+    if (phaseIndex < phases.length - 1) enterPhase(phaseIndex + 1);
+  } else {
+    showSlide(slideIndex + 1);
+  }
 }
 
 function prevSlide() {
@@ -90,12 +94,25 @@ function showSlide(n) {
   for (const img of slide.images ?? []) {
     const slot = document.querySelector(`#build-stage .slot-${img.position ?? "right"}`);
     if (!slot) throw new Error(`Unknown image position "${img.position}"`);
+
+    const fig = document.createElement("figure");
+    fig.className = "slide-figure";
+    // (remove: if (img.width) fig.style.width = img.width;)
+
     const el = document.createElement("img");
     el.src = img.src;
     el.alt = img.alt ?? "";
     el.className = "slide-image";
-    if (img.width) el.style.width = img.width;
-    slot.appendChild(el);
+    if (img.width) el.style.width = img.width;     // width goes back on the image
+    fig.appendChild(el);
+
+    if (img.caption) {
+      const cap = document.createElement("figcaption");
+      cap.className = "slide-caption";
+      cap.innerHTML = img.caption;      // innerHTML so you can use <em> in captions
+      fig.appendChild(cap);
+    }
+    slot.appendChild(fig);
   }
 }
 

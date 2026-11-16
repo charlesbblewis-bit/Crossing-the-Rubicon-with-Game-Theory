@@ -38,7 +38,9 @@ function updateHint() {
 
   if (inSlides()) {
     const last = slideIndex === currentDeck.length - 1;
-    action = last && next?.type === "solve" ? "start solving" : "continue";
+    action = last && !next ? null
+           : last && next?.type === "solve" ? "start solving"
+           : "continue";
   } else if (solution === null) {
     action = "solve the tree";
   } else if (solveFinished()) {

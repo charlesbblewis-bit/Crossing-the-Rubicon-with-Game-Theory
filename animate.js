@@ -5,6 +5,8 @@ const stepBtn  = document.getElementById("step-btn");
 const statusEl = document.getElementById("status");
 const backBtn  = document.getElementById("back-btn");
 
+const q = (action) => `‘${action}’`;   // wraps a branch name in quotes
+
 let solution = null;   // what solve() returned: { outcome, path, order }
 let steps = [];        // the list from buildSteps
 let current = 0;       // index of the next step to show
@@ -55,7 +57,7 @@ function applyStep(step) {
     onPath.add(solution.outcome);
     markOffPath(game, onPath);
 
-    const route = solution.path.map(s => `${s.node.player} ${s.action}`).join(", ");
+    const route = solution.path.map(s => `${s.node.player} ${q(s.action)}`).join(", ");
     statusEl.textContent = `Equilibrium: ${route} → ${solution.outcome.outcome}.` 
     return;
   }
@@ -67,14 +69,14 @@ function applyStep(step) {
   switch (step.type) {
     case "options":
       for (const child of Object.values(node.actions)) child.edgeEl.classList.add("considering");
-      statusEl.textContent = `${node.player} can ${Object.keys(node.actions).join(" or ")}.`;
+      statusEl.textContent = `${node.player} can ${Object.keys(node.actions).map(q).join(" or ")}.`;
       break;
 
     case "choose":
       for (const [action, child] of Object.entries(node.actions)) {
         child.edgeEl.classList.add(action === chosen ? "chosen" : "rejected");
       }
-      statusEl.textContent = `${node.player} chooses ${chosen}.`;
+      statusEl.textContent = `${node.player} chooses ${q(chosen)}.`;
       break;
       
     case "compare": {
@@ -85,7 +87,7 @@ function applyStep(step) {
         const pieces = isLeaf ? child.payoffParts : child.valueParts;
         pieces[node.player].classList.add("compared");
         const value = (isLeaf ? child : child.value).payoffs[node.player];
-        lines.push(`${action} gives ${value}`);
+        lines.push(`${q(action)} gives ${value}`);
       }
       statusEl.textContent = `For ${node.player}: ${lines.join(", ")}.`;
       break;
@@ -93,7 +95,7 @@ function applyStep(step) {
 
     case "value": {
         node.valueEl.classList.remove("hidden");
-        statusEl.textContent = `So this decision is worth ${node.valueEl.textContent} (${step.entry.outcome.outcome}).`;
+        statusEl.textContent = `So this decision is worth: ${node.valueEl.textContent} (${step.entry.outcome.outcome}).`;
         break;
         }
 
