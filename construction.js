@@ -149,3 +149,9 @@ function elementsFor(ref) {
 }
 
 enterPhase(0);
+// Preload slide images so the first showing doesn't jump
+for (const deck of [buildSlides, explainSlides, conclusionSlides, finalSlides]) {
+  for (const slide of deck) {
+    for (const img of slide.images ?? []) new Image().src = img.src;
+  }
+}
