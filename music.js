@@ -2,7 +2,7 @@
 
 const music = new Audio("audio/mondamusic.mp3");
 music.loop = true;
-music.volume = 0.38;           
+music.volume = 0.30;           
 
 const musicBtn = document.getElementById("music-btn");
 let musicOn = true;
