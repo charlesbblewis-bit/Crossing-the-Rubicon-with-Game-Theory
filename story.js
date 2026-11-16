@@ -190,7 +190,7 @@ const conclusionSlides = [
 const finalSlides = [
   { note: { title: "Why Game Theory?", text: "That kind of insight shows the potential power of game theory. In this case, with a highly simplified model and a very complex situation, it may not be wholly persuasive, but the logic can be expanded to more closely fit the historical event, thus providing more convincing analysis." } },
   { note: { title: "Why Game Theory?", text: "By giving a structure and framework to these historical events, game theory can do two things: provide a clear and logical explanation for something which feels intuitively correct (like we did here!), but also, occasionally, throw up a result which goes against our initial impressions. Sometimes it may be simply due to a quirk in the model, but other times it could lead us to reexamine the sources and view the history in a new way." } },
-  { note: { title: "Why Game Theory?", text: "Game theory is used today in so many applications, from matching organ donors, informing nuclear deterrence or even analysing penalty kicks in soccer, so why not also let it help us better understand our past!" },
+  { note: { title: "Why Game Theory?", text: "Game theory is used today in so many applications, from matching organ donors, informing nuclear deterrence or even analysing penalty kicks in soccer, so why not also let it help us better understand our past! <em>fin</em>" },
     images: [
     { src: "images/penalty.jpg", position: "below", width: "40vw", alt: "Penalty" }
     ] }

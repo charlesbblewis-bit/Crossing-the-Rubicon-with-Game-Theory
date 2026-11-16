@@ -59,7 +59,7 @@ document.addEventListener("keydown", (e) => {
   if (!inTreeScene() || e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
   if (e.target.matches("input, textarea, select")) return;
 
-  if (e.code === "Space" || e.code === "ArrowRight") {
+  if (e.code === "Space") {
     e.preventDefault();
     pressNext();
   } else if (e.code === "ArrowLeft" || e.code === "Backspace") {
