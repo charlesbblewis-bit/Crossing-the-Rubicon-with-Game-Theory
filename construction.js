@@ -16,7 +16,8 @@ const phases = [
   { type: "solve" },
   { type: "slides", deck: explainSlides, tree: "pompeyNoWar", keepTree: true },
   { type: "solve" },
-  { type: "slides", deck: conclusionSlides, keepTree: true }
+  { type: "slides", deck: conclusionSlides, keepTree: true },
+  { type: "slides", deck: finalSlides, keepTree: false }
 ];
 
 let phaseIndex = 0;

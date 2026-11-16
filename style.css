@@ -180,3 +180,14 @@ button  { font-family: inherit; font-size: 1rem; padding: 0.3rem 0.9rem; margin-
 .slide-image   { display: block; }
 .slide-caption { display: table-caption; caption-side: bottom;
                  margin-top: 0.4em; font-size: 0.8rem; text-align: center; opacity: 0.8; }
+
+/* Note title: no forced capitals */
+#build-note h3 {
+  text-transform: none;
+  letter-spacing: normal;
+  font-size: 1rem;      /* optional: 0.85rem was sized for capitals */
+}
+
+/* Top line matching each box's left line */
+#build-note  { border-top: 3px solid #4a6b82; }
+#build-quote { border-top: 3px solid #8b1a1a; }
